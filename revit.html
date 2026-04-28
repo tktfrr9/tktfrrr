@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Duel Rapide</title>
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(135deg, #1e1e2f, #3a3a6a);
+        color: white;
+        font-family: Arial;
+        text-align: center;
+    }
+
+    h1 {
+        margin-top: 30px;
+        font-size: 50px;
+    }
+
+    #message {
+        font-size: 40px;
+        margin-top: 60px;
+    }
+
+    .controls {
+        margin-top: 30px;
+        font-size: 20px;
+    }
+
+    .score {
+        margin-top: 30px;
+        font-size: 25px;
+    }
+
+    button {
+        margin-top: 40px;
+        padding: 15px 30px;
+        font-size: 20px;
+        border: none;
+        border-radius: 10px;
+        background: #ff4757;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #ff6b81;
+    }
+</style>
+</head>
+<body>
+
+<h1>⚔️ Duel Rapide ⚔️</h1>
+
+<div class="controls">
+    Joueur 1 : touche <b>A</b> <br>
+    Joueur 2 : touche <b>L</b>
+</div>
+
+<div id="message">Clique sur START</div>
+
+<div class="score">
+    🧑 Joueur 1 : <span id="score1">0</span> |
+    🧑 Joueur 2 : <span id="score2">0</span>
+</div>
+
+<button onclick="startGame()">START</button>
+
+<script>
+let started = false;
+let canPlay = false;
+
+let score1 = localStorage.getItem("score1") || 0;
+let score2 = localStorage.getItem("score2") || 0;
+
+document.getElementById("score1").innerText = score1;
+document.getElementById("score2").innerText = score2;
+
+function startGame() {
+    started = true;
+    canPlay = false;
+    document.getElementById("message").innerText = "⏳ Préparez-vous...";
+    
+    let delay = Math.random() * 3000 + 2000;
+
+    setTimeout(() => {
+        canPlay = true;
+        document.getElementById("message").innerText = "🔥 GO !!! 🔥";
+    }, delay);
+}
+
+document.addEventListener("keydown", (e) => {
+    if (!started) return;
+
+    if (!canPlay) {
+        document.getElementById("message").innerText = "❌ Trop tôt !";
+        reset();
+        return;
+    }
+
+    if (e.key.toLowerCase() === "a") {
+        score1++;
+        localStorage.setItem("score1", score1);
+        document.getElementById("message").innerText = "🏆 Joueur 1 gagne !";
+        updateScore();
+        reset();
+    }
+
+    if (e.key.toLowerCase() === "l") {
+        score2++;
+        localStorage.setItem("score2", score2);
+        document.getElementById("message").innerText = "🏆 Joueur 2 gagne !";
+        updateScore();
+        reset();
+    }
+});
+
+function updateScore() {
+    document.getElementById("score1").innerText = score1;
+    document.getElementById("score2").innerText = score2;
+}
+
+function reset() {
+    started = false;
+    canPlay = false;
+}
+</script>
+
+</body>
+</html>
